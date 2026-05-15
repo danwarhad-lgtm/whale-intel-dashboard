@@ -35,6 +35,19 @@ const SEVERITY_VARIANT = {
   critical: "danger",
 };
 
+const ADDR_EXPLORERS = {
+  eth: "https://etherscan.io/address/",
+  btc: "https://www.blockchain.com/btc/address/",
+  bsc: "https://bscscan.com/address/",
+  tron: "https://tronscan.org/#/address/",
+  sol: "https://solscan.io/account/",
+};
+
+function addressUrl(chain, addr) {
+  const base = ADDR_EXPLORERS[chain] || ADDR_EXPLORERS.eth;
+  return `${base}${addr}`;
+}
+
 export default function WhaleTrackerPage() {
   const [chain, setChain] = React.useState("all");
   const [severity, setSeverity] = React.useState("all");
@@ -200,6 +213,7 @@ export default function WhaleTrackerPage() {
                         <th className="px-2 py-2">Chain</th>
                         <th className="px-2 py-2">Token</th>
                         <th className="px-2 py-2">Type</th>
+                        <th className="px-2 py-2">Tx</th>
                         <th className="px-2 py-2">From</th>
                         <th className="px-2 py-2">To</th>
                         <th className="px-2 py-2 text-right">Value</th>
@@ -209,7 +223,7 @@ export default function WhaleTrackerPage() {
                       {txs.map((t) => (
                         <tr
                           key={t.id}
-                          className="border-t border-border/60 align-top"
+                          className="border-t border-border/60 align-top transition-colors hover:bg-accent/30"
                         >
                           <td className="px-2 py-2 text-xs text-muted-foreground">
                             {formatRelativeTime(t.timestamp)}
@@ -225,16 +239,43 @@ export default function WhaleTrackerPage() {
                             {t.type.replace("_", " ")}
                           </td>
                           <td className="px-2 py-2 text-xs">
-                            <div className="font-medium">{t.fromLabel}</div>
-                            <div className="text-muted-foreground">
-                              {shortenHash(t.fromAddress)}
-                            </div>
+                            <a
+                              href={t.blockExplorerUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-mono text-primary hover:underline"
+                              title={t.hash}
+                            >
+                              {shortenHash(t.hash)}
+                            </a>
                           </td>
                           <td className="px-2 py-2 text-xs">
-                            <div className="font-medium">{t.toLabel}</div>
-                            <div className="text-muted-foreground">
-                              {shortenHash(t.toAddress)}
-                            </div>
+                            <a
+                              href={addressUrl(t.chain, t.fromAddress)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block hover:underline"
+                              title={t.fromAddress}
+                            >
+                              <div className="font-medium text-foreground">{t.fromLabel}</div>
+                              <div className="font-mono text-muted-foreground">
+                                {shortenHash(t.fromAddress)}
+                              </div>
+                            </a>
+                          </td>
+                          <td className="px-2 py-2 text-xs">
+                            <a
+                              href={addressUrl(t.chain, t.toAddress)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block hover:underline"
+                              title={t.toAddress}
+                            >
+                              <div className="font-medium text-foreground">{t.toLabel}</div>
+                              <div className="font-mono text-muted-foreground">
+                                {shortenHash(t.toAddress)}
+                              </div>
+                            </a>
                           </td>
                           <td
                             className={cn(
