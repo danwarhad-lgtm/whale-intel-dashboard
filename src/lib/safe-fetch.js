@@ -22,6 +22,8 @@ export async function safeFetch(url, opts = {}) {
     try {
       const res = await fetch(url, {
         ...opts.init,
+        method: opts.method ?? opts.init?.method ?? "GET",
+        body: opts.body ?? opts.init?.body,
         signal: controller.signal,
         headers: {
           Accept: parseJson ? "application/json" : "application/rss+xml, application/xml, text/xml, */*",

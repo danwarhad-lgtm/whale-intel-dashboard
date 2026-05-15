@@ -58,7 +58,8 @@ export default function FundingPage() {
                 </thead>
                 <tbody>
                   {items.map((x) => {
-                    const apr = x.fundingRate * 3 * 365 * 100;
+                    const intervals = 24 / (x.fundingIntervalHours || 8);
+                    const apr = x.fundingRate * intervals * 365 * 100;
                     return (
                       <tr key={x.pair} className="border-b border-border/40 hover:bg-accent/30">
                         <td className="px-4 py-3 font-mono font-semibold">{x.symbol}</td>

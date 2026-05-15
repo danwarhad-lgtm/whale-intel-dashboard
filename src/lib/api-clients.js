@@ -119,6 +119,17 @@ export async function binanceOI(symbol) {
   return safeFetch(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${symbol}`, { timeoutMs: 6000, retries: 1 });
 }
 
+/* ============ Hyperliquid (perp, 100% global, no geo-block) ============ */
+export async function hyperliquidMetaAndCtxs() {
+  return safeFetch(`https://api.hyperliquid.xyz/info`, {
+    timeoutMs: 10000,
+    retries: 1,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ type: "metaAndAssetCtxs" }),
+  });
+}
+
 /* ============ Binance ============ */
 export async function binanceTicker24h(symbol) {
   return safeFetch(`${BINANCE_BASE}/api/v3/ticker/24hr?symbol=${symbol}`, {
