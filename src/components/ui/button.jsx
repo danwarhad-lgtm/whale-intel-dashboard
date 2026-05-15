@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 const variantClasses = {
   default:
-    "bg-primary text-primary-foreground shadow-[0_0_0_1px_rgba(245,158,11,0.4),0_4px_16px_-4px_var(--glow-primary)] hover:bg-primary/90 hover:shadow-[0_0_0_1px_rgba(245,158,11,0.6),0_6px_20px_-4px_var(--glow-primary)]",
+    "bg-primary text-primary-foreground shadow-[0_0_0_1px_rgba(129,140,248,0.4),0_4px_16px_-4px_var(--glow-primary)] hover:bg-primary/90 hover:shadow-[0_0_0_1px_rgba(129,140,248,0.6),0_6px_20px_-4px_var(--glow-primary)]",
   secondary:
     "border border-border/60 bg-secondary text-secondary-foreground hover:border-primary/30 hover:bg-secondary/80",
   outline:

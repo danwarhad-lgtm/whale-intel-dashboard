@@ -30,35 +30,35 @@
 
 .dark {
   /* Cinema-grade dark base — never pure black */
-  --background: #06070d;
+  --background: #07090f;
   --foreground: #e8ecf4;
-  --card: #0c1019;
+  --card: #0d1119;
   --card-foreground: #e8ecf4;
-  --popover: #0c1019;
+  --popover: #0d1119;
   --popover-foreground: #e8ecf4;
-  /* Amber/gold = financial trust, paired with subtle indigo */
-  --primary: #f59e0b;
+  /* Indigo — modern tech (Linear/Vercel vibe), easy on the eyes */
+  --primary: #818cf8;
   --primary-foreground: #0b0f17;
-  --secondary: #111827;
+  --secondary: #131826;
   --secondary-foreground: #e8ecf4;
-  --muted: #0f1421;
+  --muted: #11151f;
   --muted-foreground: #8b94a8;
   --accent: #1a1f2e;
   --accent-foreground: #e8ecf4;
   --destructive: #f87171;
   --destructive-foreground: #0b0f17;
-  --border: #1a2236;
-  --input: #1a2236;
-  --ring: #f59e0b;
+  --border: #1c2436;
+  --input: #1c2436;
+  --ring: #818cf8;
   --success: #34d399;
   --warning: #fbbf24;
   --danger: #f87171;
   --info: #38bdf8;
   /* Glows + accents */
-  --glow-primary: rgba(245, 158, 11, 0.15);
+  --glow-primary: rgba(129, 140, 248, 0.18);
   --glow-success: rgba(52, 211, 153, 0.18);
   --glow-danger: rgba(248, 113, 113, 0.18);
-  --grid-color: rgba(245, 158, 11, 0.03);
+  --grid-color: rgba(129, 140, 248, 0.04);
 }
 
 * {
@@ -86,8 +86,8 @@ body {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(245, 158, 11, 0.04), transparent 60%),
-    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(99, 102, 241, 0.04), transparent 60%);
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(129, 140, 248, 0.06), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(52, 211, 153, 0.04), transparent 60%);
   pointer-events: none;
   z-index: -10;
 }
@@ -102,7 +102,7 @@ body {
 
 .glow-card {
   background:
-    linear-gradient(180deg, rgba(245, 158, 11, 0.04), transparent 80%),
+    linear-gradient(180deg, rgba(129, 140, 248, 0.05), transparent 80%),
     var(--card);
 }
 
@@ -116,7 +116,7 @@ body {
   transition: border-color 200ms ease, transform 200ms ease;
 }
 .elevated-card:hover {
-  border-color: rgba(245, 158, 11, 0.25);
+  border-color: rgba(129, 140, 248, 0.3);
 }
 
 /* Animated pulse dot */
