@@ -1,4 +1,5 @@
 "use client";
+import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -11,146 +12,200 @@ import {
   ShieldHalf,
   Star,
   Waves,
-  Wallet,
-  Flame,
-  Grid3x3,
-  Gauge,
   Layers,
   Boxes,
   Percent,
-  ArrowLeftRight,
   TrendingUp,
   Tags,
+  Flame,
+  Grid3x3,
+  Gauge,
   GitCompare,
   Calculator,
   Newspaper,
   Fuel,
   BookOpen,
+  ChevronDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export const NAV_ITEMS = [
-  // Intel
-  { href: "/", label: "Overview", icon: LayoutDashboard, group: "intel" },
-  { href: "/whale-tracker", label: "Whale Tracker", icon: Wallet, group: "intel" },
-  { href: "/exchange-flows", label: "Exchange Flows", icon: Waves, group: "intel" },
-  { href: "/stablecoins", label: "Stablecoins", icon: ShieldHalf, group: "intel" },
-  { href: "/market", label: "Market", icon: Coins, group: "intel" },
-  { href: "/trending", label: "Trending", icon: Flame, group: "intel" },
-  { href: "/heatmap", label: "Heatmap", icon: Grid3x3, group: "intel" },
-  { href: "/fear-greed", label: "Fear & Greed", icon: Gauge, group: "intel" },
-
-  // DeFi
-  { href: "/tvl", label: "TVL Monitor", icon: Layers, group: "defi" },
-  { href: "/protocols", label: "Top Protocols", icon: Boxes, group: "defi" },
-  { href: "/yields", label: "Yields", icon: Percent, group: "defi" },
-  { href: "/dex-volume", label: "DEX Volume", icon: TrendingUp, group: "defi" },
-  { href: "/categories", label: "Categories", icon: Tags, group: "defi" },
-
-  // Workspace
-  { href: "/alerts", label: "Alerts", icon: Bell, group: "workspace" },
-  { href: "/watchlist", label: "Watchlist", icon: Star, group: "workspace" },
-  { href: "/reports", label: "Reports", icon: FileText, group: "workspace" },
-  { href: "/compare", label: "Compare", icon: GitCompare, group: "workspace" },
-  { href: "/calculator", label: "Calculator", icon: Calculator, group: "workspace" },
-  { href: "/news", label: "News", icon: Newspaper, group: "workspace" },
-  { href: "/gas", label: "Gas Tracker", icon: Fuel, group: "workspace" },
-
-  // System
-  { href: "/glossary", label: "Glossary", icon: BookOpen, group: "system" },
-  { href: "/settings", label: "Settings", icon: Settings, group: "system" },
+const groups = [
+  {
+    id: "intel",
+    label: "Intel",
+    icon: Activity,
+    items: [
+      { href: "/", label: "Overview", icon: LayoutDashboard },
+      { href: "/whale-tracker", label: "Whale Tracker", icon: Waves },
+      { href: "/exchange-flows", label: "Exchange Flows", icon: Activity },
+      { href: "/stablecoins", label: "Stablecoins", icon: Coins },
+      { href: "/market", label: "Market", icon: ShieldHalf },
+      { href: "/trending", label: "Trending", icon: Flame },
+      { href: "/heatmap", label: "Heatmap", icon: Grid3x3 },
+      { href: "/fear-greed", label: "Fear & Greed", icon: Gauge },
+    ],
+  },
+  {
+    id: "defi",
+    label: "DeFi",
+    icon: Layers,
+    items: [
+      { href: "/tvl", label: "TVL Monitor", icon: Layers },
+      { href: "/protocols", label: "Top Protocols", icon: Boxes },
+      { href: "/yields", label: "Yields", icon: Percent },
+      { href: "/dex-volume", label: "DEX Volume", icon: TrendingUp },
+      { href: "/categories", label: "Categories", icon: Tags },
+    ],
+  },
+  {
+    id: "workspace",
+    label: "Workspace",
+    icon: Star,
+    items: [
+      { href: "/alerts", label: "Alerts", icon: Bell },
+      { href: "/watchlist", label: "Watchlist", icon: Star },
+      { href: "/reports", label: "Reports", icon: FileText },
+      { href: "/compare", label: "Compare", icon: GitCompare },
+      { href: "/calculator", label: "Calculator", icon: Calculator },
+      { href: "/news", label: "News", icon: Newspaper },
+      { href: "/gas", label: "Gas Tracker", icon: Fuel },
+    ],
+  },
+  {
+    id: "system",
+    label: "System",
+    icon: Settings,
+    items: [
+      { href: "/glossary", label: "Glossary", icon: BookOpen },
+      { href: "/settings", label: "Settings", icon: Settings },
+    ],
+  },
 ];
 
-const GROUP_LABEL = {
-  intel: "Intel",
-  defi: "DeFi",
-  workspace: "Workspace",
-  system: "System",
-};
-
-export function SidebarContent({ onNavigate }) {
+export function AppSidebar({ onNavigate }) {
   const pathname = usePathname();
-  const grouped = NAV_ITEMS.reduce((acc, item) => {
-    (acc[item.group] ??= []).push(item);
-    return acc;
-  }, {});
+
+  // Default open: group yang nge-cover current path
+  const activeGroupId = React.useMemo(() => {
+    for (const g of groups) {
+      if (g.items.some((i) => i.href === pathname)) return g.id;
+    }
+    return groups[0].id;
+  }, [pathname]);
+
+  const [open, setOpen] = React.useState(() => ({ [activeGroupId]: true }));
+
+  // Re-open ketika path berubah ke group lain
+  React.useEffect(() => {
+    setOpen((prev) => ({ ...prev, [activeGroupId]: true }));
+  }, [activeGroupId]);
+
+  const toggle = (id) => setOpen((p) => ({ ...p, [id]: !p[id] }));
 
   return (
-    <div className="flex h-full flex-col gap-2 overflow-y-auto p-4 scrollbar-thin">
-      <Link
-        href="/"
-        onClick={onNavigate}
-        className="mb-2 flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors hover:bg-accent/40"
-      >
-        <div className="relative grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-primary/30 to-primary/5 text-primary ring-1 ring-primary/30">
-          <Activity className="h-4 w-4" />
-          <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-success shadow-[0_0_8px_var(--success)]" />
+    <aside className="hidden h-screen w-64 shrink-0 border-r border-border/60 bg-card/40 backdrop-blur-md md:flex md:flex-col">
+      <div className="flex h-16 items-center gap-2 border-b border-border/60 px-5">
+        <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 ring-1 ring-primary/30">
+          <Waves className="h-4 w-4 text-primary" />
+          <span className="absolute -inset-0.5 rounded-lg bg-primary/10 blur-md" aria-hidden />
         </div>
-        <div className="leading-tight">
-          <div className="font-mono text-sm font-bold tracking-tight">
-            CryptoWhale
-          </div>
-          <div className="text-[9px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-            Polyglot · v2.0
-          </div>
-        </div>
-      </Link>
-
-      <nav className="flex flex-1 flex-col gap-3">
-        {Object.entries(grouped).map(([group, items]) => (
-          <div key={group} className="space-y-0.5">
-            <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
-              {GROUP_LABEL[group]}
-            </div>
-            {items.map((item) => {
-              const Icon = item.icon;
-              const active = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={onNavigate}
-                  className={cn(
-                    "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
-                    active
-                      ? "bg-primary/10 font-medium text-primary shadow-[inset_2px_0_0_0_var(--primary)]"
-                      : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
-                  )}
-                >
-                  <Icon
-                    className={cn(
-                      "h-4 w-4 transition-transform",
-                      active ? "" : "group-hover:scale-110",
-                    )}
-                  />
-                  <span className="flex-1 truncate">{item.label}</span>
-                  {active ? (
-                    <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-primary text-primary" />
-                  ) : null}
-                </Link>
-              );
-            })}
-          </div>
-        ))}
-      </nav>
-
-      <div className="mt-2 rounded-xl border border-border/60 bg-gradient-to-br from-secondary/60 to-secondary/20 p-3">
-        <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-          Disclaimer
-        </div>
-        <div className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
-          Educational use only. Not financial advice.
+        <div className="flex flex-col">
+          <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+            Whale Intel
+          </span>
+          <span className="text-[10px] text-muted-foreground">v0.2 · polyglot</span>
         </div>
       </div>
-    </div>
-  );
-}
 
-export function AppSidebar() {
-  return (
-    <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-card/40 backdrop-blur-sm lg:block">
-      <div className="sticky top-0 h-screen">
-        <SidebarContent />
+      <nav className="flex-1 overflow-y-auto p-3">
+        <ul className="space-y-1">
+          {groups.map((group) => {
+            const isOpen = !!open[group.id];
+            const isActiveGroup = group.items.some((i) => i.href === pathname);
+            const GroupIcon = group.icon;
+            return (
+              <li key={group.id} className="space-y-1">
+                <button
+                  type="button"
+                  onClick={() => toggle(group.id)}
+                  className={cn(
+                    "group flex w-full items-center justify-between rounded-md px-2.5 py-2 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors",
+                    isActiveGroup
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                  aria-expanded={isOpen}
+                >
+                  <span className="flex items-center gap-2">
+                    <GroupIcon className={cn("h-3.5 w-3.5", isActiveGroup ? "text-primary" : "text-muted-foreground/70")} />
+                    {group.label}
+                    <span className="text-[9px] font-normal tracking-normal text-muted-foreground/60">
+                      {group.items.length}
+                    </span>
+                  </span>
+                  <ChevronDown
+                    className={cn(
+                      "h-3.5 w-3.5 transition-transform duration-200",
+                      isOpen ? "rotate-0 text-foreground" : "-rotate-90 text-muted-foreground/60",
+                    )}
+                  />
+                </button>
+
+                <div
+                  className={cn(
+                    "grid transition-all duration-200 ease-out",
+                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+                  )}
+                >
+                  <ul className="ml-2 overflow-hidden border-l border-border/40 pl-2">
+                    {group.items.map((item) => {
+                      const active = pathname === item.href;
+                      const Icon = item.icon;
+                      return (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            onClick={() => onNavigate?.()}
+                            className={cn(
+                              "group relative flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-sm font-medium transition-all",
+                              active
+                                ? "bg-primary/10 text-primary shadow-[inset_0_0_0_1px_rgba(129,140,248,0.18)]"
+                                : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
+                            )}
+                          >
+                            <Icon
+                              className={cn(
+                                "h-3.5 w-3.5 transition-colors",
+                                active ? "text-primary" : "text-muted-foreground/70 group-hover:text-foreground",
+                              )}
+                            />
+                            <span className="truncate">{item.label}</span>
+                            {active ? (
+                              <span className="ml-auto h-1 w-1 rounded-full bg-primary shadow-[0_0_8px_rgba(129,140,248,0.8)]" />
+                            ) : null}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      <div className="border-t border-border/60 p-3">
+        <div className="rounded-lg border border-border/60 bg-card/60 p-3">
+          <div className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Status</div>
+          <div className="mt-1 flex items-center gap-2">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success/60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-success" />
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-wider text-success">Live feed</span>
+          </div>
+        </div>
       </div>
     </aside>
   );
