@@ -1,34 +1,44 @@
 "use client";
 import { Activity, CircleDashed, Database, Sparkles, AlertTriangle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { formatRelativeTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 const STATUS_META = {
-  live: { label: "Live", variant: "success", Icon: Activity },
-  cached: { label: "Cached", variant: "info", Icon: Database },
-  fallback: { label: "Fallback", variant: "warning", Icon: CircleDashed },
-  simulated: { label: "Simulated", variant: "secondary", Icon: Sparkles },
-  error: { label: "Error", variant: "danger", Icon: AlertTriangle },
+  live: { label: "LIVE", dotColor: "bg-success shadow-[0_0_8px_var(--success)]", textColor: "text-success", Icon: Activity },
+  cached: { label: "CACHED", dotColor: "bg-info shadow-[0_0_8px_var(--info)]", textColor: "text-info", Icon: Database },
+  fallback: { label: "FALLBACK", dotColor: "bg-warning shadow-[0_0_8px_var(--warning)]", textColor: "text-warning", Icon: CircleDashed },
+  simulated: { label: "SIM", dotColor: "bg-muted-foreground", textColor: "text-muted-foreground", Icon: Sparkles },
+  error: { label: "ERROR", dotColor: "bg-danger shadow-[0_0_8px_var(--danger)]", textColor: "text-danger", Icon: AlertTriangle },
 };
 
 export function DataSourceBadge({ status, provider, lastUpdated, className }) {
   const meta = STATUS_META[status] ?? STATUS_META.error;
-  const Icon = meta.Icon;
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-2.5 py-1 text-[11px] text-muted-foreground",
+        "inline-flex items-center gap-2.5 rounded-lg border border-border/60 bg-card/40 px-3 py-1.5 backdrop-blur-sm",
         className,
       )}
     >
-      <Badge variant={meta.variant} className="gap-1">
-        <Icon className="h-3 w-3" />
+      <span className={cn("h-1.5 w-1.5 rounded-full", meta.dotColor)} />
+      <span className={cn("font-mono text-[10px] font-bold uppercase tracking-[0.15em]", meta.textColor)}>
         {meta.label}
-      </Badge>
-      {provider ? <span className="hidden sm:inline">{provider}</span> : null}
+      </span>
+      {provider ? (
+        <>
+          <span className="h-3 w-px bg-border/60" />
+          <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+            {provider}
+          </span>
+        </>
+      ) : null}
       {lastUpdated ? (
-        <span className="hidden md:inline">{formatRelativeTime(lastUpdated)}</span>
+        <>
+          <span className="hidden h-3 w-px bg-border/60 sm:inline-block" />
+          <span className="hidden font-mono text-[10px] tabular-nums text-muted-foreground/80 sm:inline">
+            {formatRelativeTime(lastUpdated)}
+          </span>
+        </>
       ) : null}
     </div>
   );

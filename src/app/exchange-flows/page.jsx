@@ -53,8 +53,12 @@ export default function ExchangeFlowsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Exchange Flows</h1>
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">▶ Whale Intel</span>
+            <span className="h-px w-8 bg-gradient-to-r from-primary/60 to-transparent" />
+          </div>
+          <h1 className="text-3xl font-semibold tracking-tight glow-text-primary">Exchange Flows</h1>
           <p className="text-sm text-muted-foreground">
             Inflow vs outflow across major centralized exchanges. Simulated feed.
           </p>

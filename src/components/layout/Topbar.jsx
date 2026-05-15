@@ -1,13 +1,20 @@
 "use client";
 import * as React from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Menu, Moon, RefreshCcw, Search, Sun, Wallet } from "lucide-react";
+import {
+  Menu,
+  Moon,
+  RefreshCcw,
+  Search,
+  Sun,
+  Wallet,
+  TrendingUp,
+  TrendingDown,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { useMarketData } from "@/lib/hooks/use-market-data";
 import { useSettings, useUpdateSetting } from "@/lib/hooks/use-settings";
-import { DataSourceBadge } from "@/components/shared/data-source-badge";
 import { formatUsdCompact } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -25,8 +32,6 @@ export function Topbar({ onOpenSidebar }) {
   const eth = top.find((c) => c.symbol === "eth") ?? top[1] ?? null;
   const marketCap = dataPayload?.global?.totalMarketCap ?? 0;
   const status = market.data?.status ?? "error";
-  const provider = market.data?.provider;
-  const lastUpdated = market.data?.lastUpdated;
   const loading = market.isLoading;
 
   const theme = settings.theme ?? "dark";
@@ -61,8 +66,13 @@ export function Topbar({ onOpenSidebar }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [refreshAll]);
 
+  const statusDot =
+    status === "live" ? "live" : status === "error" ? "error" : "cached";
+  const statusText =
+    status === "live" ? "LIVE" : status === "error" ? "OFFLINE" : "CACHED";
+
   return (
-    <header className="sticky top-0 z-30 flex flex-wrap items-center gap-3 border-b border-border bg-background/80 px-4 py-3 backdrop-blur lg:px-6">
+    <header className="sticky top-0 z-30 flex flex-wrap items-center gap-3 border-b border-border/60 bg-background/70 px-4 py-3 backdrop-blur-xl lg:px-6">
       <Button
         variant="ghost"
         size="icon"
@@ -79,32 +89,35 @@ export function Topbar({ onOpenSidebar }) {
           ref={searchRef}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search tokens, wallets, tx…  ( / )"
-          className="pl-9"
+          placeholder="Search tokens, wallets, tx…"
+          className="pl-9 pr-12"
         />
+        <kbd className="pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 rounded border border-border bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground sm:inline-block">
+          /
+        </kbd>
       </div>
 
-      <div className="hidden flex-1 items-center gap-3 md:flex">
+      <div className="hidden flex-1 items-center gap-2 md:flex">
         <PriceTicker label="BTC" coin={btc} loading={loading} />
         <PriceTicker label="ETH" coin={eth} loading={loading} />
-        <div className="hidden items-center gap-2 rounded-lg border border-border bg-card/70 px-3 py-1.5 text-xs xl:flex">
+        <div className="hidden items-center gap-2 rounded-lg border border-border/60 bg-card/40 px-3 py-1.5 text-xs xl:flex">
           <Wallet className="h-3.5 w-3.5 text-muted-foreground" />
-          <span className="text-muted-foreground">Mcap</span>
-          <span className="font-medium tabular-nums">
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            MCAP
+          </span>
+          <span className="font-mono font-medium tabular-nums">
             {formatUsdCompact(marketCap)}
           </span>
         </div>
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <DataSourceBadge
-          status={status}
-          provider={provider}
-          lastUpdated={lastUpdated}
-        />
-        <Badge variant={status === "live" ? "success" : "warning"}>
-          {status === "live" ? "Live" : "Demo"}
-        </Badge>
+        <div className="flex items-center gap-2 rounded-lg border border-border/60 bg-card/40 px-2.5 py-1.5">
+          <span className={`status-dot ${statusDot}`} />
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            {statusText}
+          </span>
+        </div>
         <Button
           variant="outline"
           size="icon"
@@ -134,20 +147,28 @@ export function Topbar({ onOpenSidebar }) {
 function PriceTicker({ label, coin, loading }) {
   const price = coin?.current_price ?? null;
   const change = coin?.price_change_percentage_24h ?? null;
-  const trendColor =
-    typeof change === "number"
-      ? change >= 0
-        ? "text-success"
-        : "text-danger"
-      : "text-muted-foreground";
+  const isUp = typeof change === "number" && change >= 0;
+  const trendColor = isUp ? "text-success" : "text-danger";
+  const TrendIcon = isUp ? TrendingUp : TrendingDown;
+
   return (
-    <div className="flex items-center gap-2 rounded-lg border border-border bg-card/70 px-3 py-1.5 text-xs">
-      <span className="text-muted-foreground">{label}</span>
-      <span className="font-medium tabular-nums">
-        {loading && price === null ? "…" : formatUsdCompact(price ?? 0)}
+    <div className="flex items-center gap-2 rounded-lg border border-border/60 bg-card/40 px-3 py-1.5 text-xs">
+      <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+        {label}
+      </span>
+      <span className="font-mono font-medium tabular-nums">
+        {loading && price === null
+          ? "—"
+          : `$${price >= 1000 ? formatUsdCompact(price).replace("$", "") : price?.toFixed(2)}`}
       </span>
       {typeof change === "number" ? (
-        <span className={cn("text-[11px] tabular-nums", trendColor)}>
+        <span
+          className={cn(
+            "flex items-center gap-0.5 font-mono text-[10px] font-medium tabular-nums",
+            trendColor,
+          )}
+        >
+          <TrendIcon className="h-2.5 w-2.5" />
           {change >= 0 ? "+" : ""}
           {change.toFixed(2)}%
         </span>
