@@ -2,11 +2,11 @@
 
 > Educational research dashboard for crypto whale activity, exchange flows, stablecoin peg health, and market structure.
 
-## Pengantar (Bahasa Indonesia)
+## Overview
 
-Whale Intel adalah dashboard riset *open-source* untuk memantau aktivitas paus (whale), arus dana di bursa terpusat, kesehatan peg stablecoin, dan kondisi pasar kripto secara umum. Aplikasi ini dirancang sebagai *terminal poliglot*: bagian utama ditulis dengan **Next.js 15 (JavaScript)**, sementara komponen pendukung memakai **Python** untuk skoring, **Go** untuk health probe, **SQL** untuk skema persistensi, dan **Bash** untuk skrip otomasi. Semua data diambil dari API publik gratis seperti CoinGecko, DefiLlama, dan Binance — tanpa API key berbayar.
+Whale Intel is an open-source research dashboard for monitoring whale wallet activity, centralized-exchange fund flows, stablecoin peg health, and overall crypto market conditions. It is built as a **polyglot terminal**: the main app is **Next.js 15 (JavaScript)**, with **Python** powering the risk scoring engine, **Go** running parallel API health probes, **SQL** providing an optional Postgres schema, and **Bash** automating dev / deploy / probe workflows. All data comes from free public APIs — CoinGecko, DefiLlama, and Binance — with no paid API keys required.
 
-Proyek ini bersifat *demo riset*. Beberapa angka (transaksi paus, exchange flow detail) di-*simulasikan* karena dataset sebenarnya berada di balik layanan berbayar (Whale Alert, Glassnode, Nansen, dll). Tujuan utamanya adalah menunjukkan bagaimana lima bahasa pemrograman dapat bekerja sama dalam satu platform terminal kripto, lengkap dengan UI gelap, mode *fallback* otomatis, dan persistensi lokal untuk *watchlist*, *alerts*, serta *reports*. **Bukan nasihat finansial.**
+This is a research demo. Some figures (whale transactions, exchange flow detail) are **simulated** because the real datasets sit behind paid services (Whale Alert, Glassnode, Nansen, etc). The goal is to demonstrate how five programming languages can cooperate inside a single crypto terminal — complete with a dark UI, automatic fallbacks, and local persistence for watchlist / alerts / reports. **Not financial advice.**
 
 ## Features
 
