@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { AppSidebar, SidebarContent } from "@/components/layout/AppSidebar";
+import { AppSidebar } from "@/components/layout/AppSidebar";
 import { Topbar } from "@/components/layout/Topbar";
 import {
   Dialog,
@@ -32,7 +32,9 @@ export function AppShell({ children }) {
         <DialogPortal>
           <DialogContent className="left-0 top-0 max-w-xs translate-x-0 translate-y-0 rounded-none border-r p-0 lg:hidden">
             <DialogTitle className="sr-only">Navigation</DialogTitle>
-            <SidebarContent onNavigate={() => setOpen(false)} />
+            <div className="md:hidden">
+              <AppSidebar onNavigate={() => setOpen(false)} mobile />
+            </div>
           </DialogContent>
         </DialogPortal>
       </Dialog>

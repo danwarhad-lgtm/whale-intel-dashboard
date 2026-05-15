@@ -82,7 +82,7 @@ const groups = [
   },
 ];
 
-export function AppSidebar({ onNavigate }) {
+export function AppSidebar({ onNavigate, mobile = false }) {
   const pathname = usePathname();
 
   // Default open: group yang nge-cover current path
@@ -103,7 +103,10 @@ export function AppSidebar({ onNavigate }) {
   const toggle = (id) => setOpen((p) => ({ ...p, [id]: !p[id] }));
 
   return (
-    <aside className="hidden h-screen w-64 shrink-0 border-r border-border/60 bg-card/40 backdrop-blur-md md:flex md:flex-col">
+    <aside className={cn(
+      "h-screen w-64 shrink-0 flex-col border-r border-border/60 bg-card/40 backdrop-blur-md",
+      mobile ? "flex" : "hidden md:flex",
+    )}>
       <div className="flex h-16 items-center gap-2 border-b border-border/60 px-5">
         <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 ring-1 ring-primary/30">
           <Waves className="h-4 w-4 text-primary" />
