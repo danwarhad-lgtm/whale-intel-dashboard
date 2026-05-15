@@ -12,24 +12,60 @@ import {
   Star,
   Waves,
   Wallet,
+  Flame,
+  Grid3x3,
+  Gauge,
+  Layers,
+  Boxes,
+  Percent,
+  ArrowLeftRight,
+  TrendingUp,
+  Tags,
+  GitCompare,
+  Calculator,
+  Newspaper,
+  Fuel,
+  BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export const NAV_ITEMS = [
-  { href: "/", label: "Overview", icon: LayoutDashboard, group: "main" },
-  { href: "/whale-tracker", label: "Whale Tracker", icon: Wallet, group: "main" },
-  { href: "/exchange-flows", label: "Exchange Flows", icon: Waves, group: "main" },
-  { href: "/stablecoins", label: "Stablecoins", icon: ShieldHalf, group: "main" },
-  { href: "/market", label: "Market", icon: Coins, group: "main" },
-  { href: "/alerts", label: "Alerts", icon: Bell, group: "tools" },
-  { href: "/watchlist", label: "Watchlist", icon: Star, group: "tools" },
-  { href: "/reports", label: "Reports", icon: FileText, group: "tools" },
-  { href: "/settings", label: "Settings", icon: Settings, group: "tools" },
+  // Intel
+  { href: "/", label: "Overview", icon: LayoutDashboard, group: "intel" },
+  { href: "/whale-tracker", label: "Whale Tracker", icon: Wallet, group: "intel" },
+  { href: "/exchange-flows", label: "Exchange Flows", icon: Waves, group: "intel" },
+  { href: "/stablecoins", label: "Stablecoins", icon: ShieldHalf, group: "intel" },
+  { href: "/market", label: "Market", icon: Coins, group: "intel" },
+  { href: "/trending", label: "Trending", icon: Flame, group: "intel" },
+  { href: "/heatmap", label: "Heatmap", icon: Grid3x3, group: "intel" },
+  { href: "/fear-greed", label: "Fear & Greed", icon: Gauge, group: "intel" },
+
+  // DeFi
+  { href: "/tvl", label: "TVL Monitor", icon: Layers, group: "defi" },
+  { href: "/protocols", label: "Top Protocols", icon: Boxes, group: "defi" },
+  { href: "/yields", label: "Yields", icon: Percent, group: "defi" },
+  { href: "/dex-volume", label: "DEX Volume", icon: TrendingUp, group: "defi" },
+  { href: "/categories", label: "Categories", icon: Tags, group: "defi" },
+
+  // Workspace
+  { href: "/alerts", label: "Alerts", icon: Bell, group: "workspace" },
+  { href: "/watchlist", label: "Watchlist", icon: Star, group: "workspace" },
+  { href: "/reports", label: "Reports", icon: FileText, group: "workspace" },
+  { href: "/compare", label: "Compare", icon: GitCompare, group: "workspace" },
+  { href: "/calculator", label: "Calculator", icon: Calculator, group: "workspace" },
+  { href: "/news", label: "News", icon: Newspaper, group: "workspace" },
+  { href: "/gas", label: "Gas Tracker", icon: Fuel, group: "workspace" },
+
+  // System
+  { href: "/glossary", label: "Glossary", icon: BookOpen, group: "system" },
+  { href: "/settings", label: "Settings", icon: Settings, group: "system" },
 ];
 
 const GROUP_LABEL = {
-  main: "Intel",
-  tools: "Workspace",
+  intel: "Intel",
+  defi: "DeFi",
+  workspace: "Workspace",
+  system: "System",
 };
 
 export function SidebarContent({ onNavigate }) {
@@ -40,7 +76,7 @@ export function SidebarContent({ onNavigate }) {
   }, {});
 
   return (
-    <div className="flex h-full flex-col gap-2 p-4">
+    <div className="flex h-full flex-col gap-2 overflow-y-auto p-4 scrollbar-thin">
       <Link
         href="/"
         onClick={onNavigate}
@@ -55,7 +91,7 @@ export function SidebarContent({ onNavigate }) {
             CryptoWhale
           </div>
           <div className="text-[9px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-            Polyglot · v1.0
+            Polyglot · v2.0
           </div>
         </div>
       </Link>
@@ -87,7 +123,7 @@ export function SidebarContent({ onNavigate }) {
                       active ? "" : "group-hover:scale-110",
                     )}
                   />
-                  <span className="flex-1">{item.label}</span>
+                  <span className="flex-1 truncate">{item.label}</span>
                   {active ? (
                     <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-primary text-primary" />
                   ) : null}
@@ -98,7 +134,7 @@ export function SidebarContent({ onNavigate }) {
         ))}
       </nav>
 
-      <div className="rounded-xl border border-border/60 bg-gradient-to-br from-secondary/60 to-secondary/20 p-3">
+      <div className="mt-2 rounded-xl border border-border/60 bg-gradient-to-br from-secondary/60 to-secondary/20 p-3">
         <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
           Disclaimer
         </div>
@@ -113,7 +149,7 @@ export function SidebarContent({ onNavigate }) {
 export function AppSidebar() {
   return (
     <aside className="hidden w-64 shrink-0 border-r border-border/60 bg-card/40 backdrop-blur-sm lg:block">
-      <div className="sticky top-0">
+      <div className="sticky top-0 h-screen">
         <SidebarContent />
       </div>
     </aside>

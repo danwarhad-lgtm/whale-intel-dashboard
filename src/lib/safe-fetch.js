@@ -9,6 +9,7 @@
 export async function safeFetch(url, opts = {}) {
   const timeoutMs = opts.timeoutMs ?? 8000;
   const retries = opts.retries ?? 1;
+  const parseJson = opts.parseJson !== false;
   const start = Date.now();
 
   let lastError = null;
@@ -23,7 +24,7 @@ export async function safeFetch(url, opts = {}) {
         ...opts.init,
         signal: controller.signal,
         headers: {
-          Accept: "application/json",
+          Accept: parseJson ? "application/json" : "application/rss+xml, application/xml, text/xml, */*",
           "User-Agent": "whale-intel-poly/0.1",
           ...(opts.headers ?? {}),
         },
@@ -45,7 +46,7 @@ export async function safeFetch(url, opts = {}) {
         };
       }
 
-      const data = await res.json();
+      const data = parseJson ? await res.json() : await res.text();
       return {
         ok: true,
         data,
