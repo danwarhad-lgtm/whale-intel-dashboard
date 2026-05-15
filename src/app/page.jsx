@@ -92,7 +92,7 @@ export default function OverviewPage() {
   });
 
   const tickers = (marketData?.coins ?? []).slice(0, 6);
-  const apiPings = apiStatus.data?.data ?? [];
+  const apiPings = apiStatus.data?.data?.checks ?? [];
 
   return (
     <div className="space-y-6">
