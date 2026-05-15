@@ -81,6 +81,44 @@ export async function dllPing() {
   return safeFetch(`${DLL_BASE}/protocols`, { timeoutMs: 6000, retries: 0 });
 }
 
+/* ============ DexScreener ============ */
+export async function dexscreenerSearch(q) {
+  return safeFetch(`https://api.dexscreener.com/latest/dex/search?q=${encodeURIComponent(q)}`, { timeoutMs: 8000, retries: 1 });
+}
+
+/* ============ Mempool.space ============ */
+export async function mempoolHashrate(window = "3y") {
+  return safeFetch(`https://mempool.space/api/v1/mining/hashrate/${window}`, { timeoutMs: 8000, retries: 1 });
+}
+export async function mempoolDifficulty() {
+  return safeFetch(`https://mempool.space/api/v1/difficulty-adjustment`, { timeoutMs: 6000, retries: 1 });
+}
+export async function mempoolFees() {
+  return safeFetch(`https://mempool.space/api/v1/fees/recommended`, { timeoutMs: 6000, retries: 1 });
+}
+export async function mempoolStats() {
+  return safeFetch(`https://mempool.space/api/mempool`, { timeoutMs: 6000, retries: 1 });
+}
+export async function mempoolBlocks() {
+  return safeFetch(`https://mempool.space/api/v1/blocks`, { timeoutMs: 6000, retries: 1 });
+}
+
+/* ============ CoinGecko detail ============ */
+export async function cgCoinDetail(id) {
+  return safeFetch(`${CG_BASE}/coins/${encodeURIComponent(id)}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false`, { timeoutMs: 10000, retries: 1 });
+}
+export async function cgCoinChart(id, days = 30, currency = "usd") {
+  return safeFetch(`${CG_BASE}/coins/${encodeURIComponent(id)}/market_chart?vs_currency=${currency}&days=${days}`, { timeoutMs: 10000, retries: 1 });
+}
+
+/* ============ Binance Futures ============ */
+export async function binanceFundingAll() {
+  return safeFetch(`https://fapi.binance.com/fapi/v1/premiumIndex`, { timeoutMs: 8000, retries: 1 });
+}
+export async function binanceOI(symbol) {
+  return safeFetch(`https://fapi.binance.com/fapi/v1/openInterest?symbol=${symbol}`, { timeoutMs: 6000, retries: 1 });
+}
+
 /* ============ Binance ============ */
 export async function binanceTicker24h(symbol) {
   return safeFetch(`${BINANCE_BASE}/api/v3/ticker/24hr?symbol=${symbol}`, {

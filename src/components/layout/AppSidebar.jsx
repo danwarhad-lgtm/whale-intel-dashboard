@@ -43,6 +43,11 @@ const groups = [
       { href: "/trending", label: "Trending", icon: Flame },
       { href: "/heatmap", label: "Heatmap", icon: Grid3x3 },
       { href: "/fear-greed", label: "Fear & Greed", icon: Gauge },
+      { href: "/movers", label: "Movers", icon: TrendingUp },
+      { href: "/funding", label: "Funding Rates", icon: Activity },
+      { href: "/open-interest", label: "Open Interest", icon: Boxes },
+      { href: "/dex-pairs", label: "DEX Pairs", icon: Coins },
+      { href: "/btc-network", label: "BTC Network", icon: ShieldHalf },
     ],
   },
   {

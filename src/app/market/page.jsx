@@ -298,12 +298,16 @@ export default function MarketPage() {
                                     {c.symbol.slice(0, 3)}
                                   </div>
                                 )}
-                                <div>
+                                <Link
+                                  href={`/token/${c.id}`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="hover:text-primary"
+                                >
                                   <div className="font-medium">{c.name}</div>
                                   <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
                                     {c.symbol}
                                   </div>
-                                </div>
+                                </Link>
                               </div>
                             </td>
                             <td className="px-4 py-3 text-right tabular-nums">
