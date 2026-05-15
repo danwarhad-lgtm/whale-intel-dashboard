@@ -109,7 +109,7 @@ export function AppSidebar({ onNavigate, mobile = false }) {
 
   return (
     <aside className={cn(
-      "h-screen w-64 shrink-0 flex-col border-r border-border/60 bg-card/40 backdrop-blur-md",
+      "h-screen w-64 shrink-0 flex-col border-r border-border/60 bg-card/40 backdrop-blur-md sticky top-0",
       mobile ? "flex" : "hidden md:flex",
     )}>
       <div className="flex h-16 items-center gap-2 border-b border-border/60 px-5">
