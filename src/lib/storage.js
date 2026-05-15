@@ -124,13 +124,40 @@ export function removeWatchlistItem(id) {
 /* --------------------- Settings --------------------- */
 
 const DEFAULT_SETTINGS = {
+  // Profile
+  displayName: "",
+  defaultCurrency: "USD",
+  language: "en",
+  timezone: "auto",
+  // Appearance
   theme: "dark",
+  density: "comfortable",
+  accentColor: "indigo",
+  fontScale: 100,
+  reduceMotion: false,
+  showGrid: true,
+  // Data
   dataMode: "live",
   refreshIntervalSec: 60,
   whaleMinUsd: 1_000_000,
+  preferredChain: "ethereum",
+  preferredGasChain: "eth",
+  pageSize: 50,
+  // Alerts
   enableAlertsExchange: true,
   enableAlertsWhale: true,
   enableAlertsStablecoin: true,
+  notificationSound: false,
+  alertThresholdHigh: 90,
+  alertThresholdMedium: 70,
+  // Display
+  showSparklines: true,
+  showLogos: true,
+  numberFormat: "compact",
+  percentDecimals: 2,
+  // Privacy
+  storeLocally: true,
+  shareUsage: false,
 };
 
 export function getSettings() {
