@@ -48,14 +48,8 @@ export function useGenerateReport() {
       const criticalCount = whaleData?.summary?.criticalCount ?? 0;
       const exchangeDeposits = whaleData?.summary?.exchangeDeposits ?? 0;
       const exchangeWithdrawals = whaleData?.summary?.exchangeWithdrawals ?? 0;
-      const totalInflow = (flowData?.summary ?? []).reduce(
-        (acc, r) => acc + (r.inflowUsd ?? 0),
-        0,
-      );
-      const totalOutflow = (flowData?.summary ?? []).reduce(
-        (acc, r) => acc + (r.outflowUsd ?? 0),
-        0,
-      );
+      const totalInflow = flowData?.summary?.totalInflow ?? 0;
+      const totalOutflow = flowData?.summary?.totalOutflow ?? 0;
       const stableHealth = stableData?.healthScore?.score ?? 0;
       const btc = marketData?.coins?.find((c) => c.symbol === "btc");
       const eth = marketData?.coins?.find((c) => c.symbol === "eth");

@@ -79,7 +79,7 @@ export default function OverviewPage() {
   const eth = marketData?.coins?.find((c) => c.symbol === "eth");
 
   const whaleScore = calculateWhaleActivityScore(whaleData?.transactions ?? []);
-  const exchangeScore = calculateExchangePressureScore(flowData?.summary ?? []);
+  const exchangeScore = calculateExchangePressureScore(flowData?.leaderboard ?? []);
   const stableScore = stableData?.healthScore ?? { score: 80 };
 
   const risk = calculateMarketRiskScore({

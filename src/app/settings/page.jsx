@@ -110,7 +110,7 @@ export default function SettingsPage() {
     });
   };
 
-  const checks = apiStatus.data?.data ?? [];
+  const checks = apiStatus.data?.data?.checks ?? [];
 
   return (
     <div className="space-y-6">
