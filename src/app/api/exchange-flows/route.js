@@ -80,8 +80,10 @@ export async function GET(req) {
 
   try {
     const txs = await fetchRealWhaleTransactions({
-      limit: 200,
-      minUsd: 250_000,
+      limit: 400,
+      minUsd: 100_000,
+      blockWindow: 30,
+      cacheTtlMs: 5 * 60_000,
     });
     leaderboard = buildLeaderboardFromTxs(txs);
     if (leaderboard) {

@@ -134,7 +134,10 @@ async function fetchEthWhales(prices, blockCount = 4, minUsd = 100_000) {
   const txs = [];
 
   // Native ETH: walk last N blocks with full tx bodies
-  for (let i = 0; i < blockCount; i++) {
+  // Cap native walk at 6 blocks regardless of blockCount — public RPCs rate-limit
+  // heavy tx-body responses, and stable-coin logs already cover the volume.
+  const nativeCount = Math.min(blockCount, 6);
+  for (let i = 0; i < nativeCount; i++) {
     const numHex = "0x" + (tip - i).toString(16);
     const block = await rpc("eth_getBlockByNumber", [numHex, true]);
     if (!block) continue;
@@ -268,19 +271,25 @@ async function fetchBtcWhales(prices, minUsd = 500_000) {
  * Fetch real whale transactions across ETH + BTC.
  * Cached for 60s. Returns at most `limit` items sorted desc by USD.
  * Throws on full failure so callers can fall back to mock.
+ *
+ * blockWindow controls the ETH log scan range. Larger window = better chance
+ * of catching CEX flows but more RPC weight. cacheTtlMs lets callers tune
+ * how long the result is cached (e.g. exchange-flows uses a longer cache).
  */
 export async function fetchRealWhaleTransactions({
   limit = 80,
   minUsd = 250_000,
+  blockWindow = 4,
+  cacheTtlMs = 60_000,
 } = {}) {
-  const cacheKey = `whales_${limit}_${minUsd}`;
+  const cacheKey = `whales_${limit}_${minUsd}_${blockWindow}`;
   const cached = cacheGet(cacheKey);
   if (cached) return cached;
 
   const prices = await getPrices();
 
   const [ethTxs, btcTxs] = await Promise.allSettled([
-    fetchEthWhales(prices, 4, minUsd),
+    fetchEthWhales(prices, blockWindow, minUsd),
     fetchBtcWhales(prices, Math.max(minUsd, 500_000)),
   ]);
   const all = [];
@@ -308,6 +317,6 @@ export async function fetchRealWhaleTransactions({
       new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
   );
 
-  cacheSet(cacheKey, out, 60_000);
+  cacheSet(cacheKey, out, cacheTtlMs);
   return out;
 }
