@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { generateMockWhaleTransactions } from "@/lib/mocks";
+import { fetchRealWhaleTransactions } from "@/lib/onchain-whales";
 import { envelope } from "@/lib/api-helpers";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +17,20 @@ export async function GET(req) {
   const page = Math.max(1, Number(searchParams.get("page") ?? 1));
   const limit = Math.min(200, Math.max(1, Number(searchParams.get("limit") ?? 25)));
 
-  const all = generateMockWhaleTransactions(50);
+  let all = [];
+  let dataStatus = "live";
+  let provider = "publicnode + mempool.space";
+  let upstreamError = null;
+
+  try {
+    all = await fetchRealWhaleTransactions({ limit: 120, minUsd: 250_000 });
+    if (!all.length) throw new Error("Empty result from upstream");
+  } catch (err) {
+    upstreamError = err?.message || String(err);
+    all = generateMockWhaleTransactions(50);
+    dataStatus = "simulated";
+    provider = "internal-simulator (fallback)";
+  }
 
   let filtered = all;
   if (chain !== "all") filtered = filtered.filter((t) => t.chain === chain);
@@ -92,8 +106,9 @@ export async function GET(req) {
           topTokens,
         },
       },
-      status: "simulated",
-      provider: "internal-simulator",
+      status: dataStatus,
+      provider,
+      error: upstreamError,
     }),
   );
 }
