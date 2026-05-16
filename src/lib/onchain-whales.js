@@ -21,6 +21,11 @@ const TRANSFER_TOPIC =
 // Per-chain RPC endpoint + block explorer + native symbol + min USD whale floor.
 // BSC/Polygon are mostly retail, so we lower the floor there to surface real
 // activity. ETH/Arbitrum see actual whale moves at higher tickets.
+//
+// maxLogWindow caps the eth_getLogs span per chain — fast chains like BSC/Polygon
+// produce way more logs per block than ETH and a 30-block ask there will time
+// out a public RPC. ETH gets the full window so exchange-flows can scan ~6min
+// of activity; others stay tight.
 const EVM_CHAINS = {
   eth: {
     rpc: "https://ethereum-rpc.publicnode.com",
@@ -28,6 +33,7 @@ const EVM_CHAINS = {
     native: "ETH",
     nativeBlocks: 4,
     minUsdFloor: 100_000,
+    maxLogWindow: 30,
   },
   bsc: {
     rpc: "https://bsc-rpc.publicnode.com",
@@ -35,6 +41,7 @@ const EVM_CHAINS = {
     native: "BNB",
     nativeBlocks: 4,
     minUsdFloor: 25_000,
+    maxLogWindow: 8,
   },
   polygon: {
     rpc: "https://polygon-bor-rpc.publicnode.com",
@@ -42,6 +49,7 @@ const EVM_CHAINS = {
     native: "MATIC",
     nativeBlocks: 4,
     minUsdFloor: 25_000,
+    maxLogWindow: 8,
   },
   arbitrum: {
     rpc: "https://arbitrum-one-rpc.publicnode.com",
@@ -49,6 +57,7 @@ const EVM_CHAINS = {
     native: "ETH",
     nativeBlocks: 4,
     minUsdFloor: 50_000,
+    maxLogWindow: 8,
   },
 };
 
@@ -225,6 +234,9 @@ async function fetchEvmWhales(chainKey, prices, blockWindow, minUsd) {
   // Use the higher of caller's minUsd and the chain's whale floor so cheap-tx
   // chains like BSC/Polygon surface activity instead of going empty.
   const floor = Math.max(minUsd, conf.minUsdFloor);
+  // Cap log window per chain — public RPCs on BSC/Polygon/Arb time out on
+  // wide ranges. ETH gets the full window for exchange-flows accuracy.
+  const effectiveWindow = Math.min(blockWindow, conf.maxLogWindow);
   let tipHex;
   try {
     tipHex = await rpc(conf.rpc, "eth_blockNumber", []);
@@ -235,7 +247,7 @@ async function fetchEvmWhales(chainKey, prices, blockWindow, minUsd) {
   const txs = [];
 
   const nativePrice = prices[conf.native] ?? 0;
-  const nativeCount = Math.min(blockWindow, conf.nativeBlocks);
+  const nativeCount = Math.min(effectiveWindow, conf.nativeBlocks);
 
   // Parallel native block fetches
   const nativePromises = [];
@@ -247,7 +259,7 @@ async function fetchEvmWhales(chainKey, prices, blockWindow, minUsd) {
   }
 
   // Parallel ERC20 log fetches
-  const fromBlock = "0x" + (tip - blockWindow + 1).toString(16);
+  const fromBlock = "0x" + (tip - effectiveWindow + 1).toString(16);
   const toBlock = tipHex;
   const tokenEntries = Object.entries(tokens);
   const tokenPromises = tokenEntries.map(([addr]) =>
