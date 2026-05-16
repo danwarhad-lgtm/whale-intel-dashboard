@@ -1,12 +1,19 @@
 {
-  "name": "whale-intel-poly",
-  "version": "0.1.0",
+  "name": "whale-intel-dashboard",
+  "version": "1.0.0",
   "private": true,
+  "description": "Multi-chain on-chain whale intelligence terminal — polyglot research dashboard powered by free public RPCs.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:apis": "bash scripts/test-apis.sh",
+    "test:rpc": "bash scripts/test-rpc.sh",
+    "score:test": "python3 api/score.py --test",
+    "alerts:test": "python3 api/alert_engine.py --dry-run"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.2",
@@ -34,6 +41,24 @@
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.0.3",
     "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.16"
-  }
+    "tailwindcss": "^3.4.16",
+    "vitest": "^2.1.9"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "crypto",
+    "whale-tracking",
+    "defi",
+    "on-chain",
+    "ethereum",
+    "bitcoin",
+    "exchange-flows",
+    "risk-engine",
+    "dashboard",
+    "next.js",
+    "polyglot"
+  ],
+  "license": "MIT"
 }

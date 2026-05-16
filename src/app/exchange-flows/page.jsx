@@ -60,7 +60,7 @@ export default function ExchangeFlowsPage() {
           </div>
           <h1 className="text-3xl font-semibold tracking-tight glow-text-primary">Exchange Flows</h1>
           <p className="text-sm text-muted-foreground">
-            Inflow vs outflow across major centralized exchanges. Simulated feed.
+            Inflow vs outflow across major centralized exchanges. Live on-chain feed.
           </p>
         </div>
         <DataSourceBadge

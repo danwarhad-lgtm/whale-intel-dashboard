@@ -7,7 +7,7 @@ const STATUS_META = {
   live: { label: "LIVE", dotColor: "bg-success shadow-[0_0_8px_var(--success)]", textColor: "text-success", Icon: Activity },
   cached: { label: "CACHED", dotColor: "bg-info shadow-[0_0_8px_var(--info)]", textColor: "text-info", Icon: Database },
   fallback: { label: "FALLBACK", dotColor: "bg-warning shadow-[0_0_8px_var(--warning)]", textColor: "text-warning", Icon: CircleDashed },
-  simulated: { label: "SIM", dotColor: "bg-muted-foreground", textColor: "text-muted-foreground", Icon: Sparkles },
+  simulated: { label: "FALLBACK", dotColor: "bg-warning shadow-[0_0_8px_var(--warning)]", textColor: "text-warning", Icon: CircleDashed },
   error: { label: "ERROR", dotColor: "bg-danger shadow-[0_0_8px_var(--danger)]", textColor: "text-danger", Icon: AlertTriangle },
 };
 

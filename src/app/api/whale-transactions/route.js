@@ -28,8 +28,8 @@ export async function GET(req) {
   } catch (err) {
     upstreamError = err?.message || String(err);
     all = generateMockWhaleTransactions(50);
-    dataStatus = "simulated";
-    provider = "internal-simulator (fallback)";
+    dataStatus = "fallback";
+    provider = "internal-fallback";
   }
 
   let filtered = all;

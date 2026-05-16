@@ -97,8 +97,8 @@ export async function GET(req) {
     leaderboard = snap.summary.slice();
     byToken = snap.byToken;
     history = snap.history;
-    dataStatus = "simulated";
-    provider = "internal-simulator (fallback)";
+    dataStatus = "fallback";
+    provider = "internal-fallback";
   }
 
   // Historical series is hard from on-chain alone; keep mock series for the

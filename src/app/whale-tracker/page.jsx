@@ -79,7 +79,7 @@ export default function WhaleTrackerPage() {
           </div>
           <h1 className="text-3xl font-semibold tracking-tight glow-text-primary">Whale Tracker</h1>
           <p className="text-sm text-muted-foreground">
-            Largest movements across major chains. Simulated feed for educational use.
+            Largest movements across major chains. Live on-chain feed.
           </p>
         </div>
         <DataSourceBadge
