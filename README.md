@@ -14,6 +14,30 @@
 
 ---
 
+## Screenshots
+
+### Overview — at a glance
+Multi-chain market structure, composite risk score, top movers, recent whale activity.
+
+![Overview Dashboard](docs/screenshots/01-overview.png)
+
+### Whale Tracker — real on-chain feed
+Live ERC20 + native transfers across Ethereum, BSC, Polygon, Arbitrum, plus Bitcoin via mempool.space. Severity tiers, CEX classification, filter by chain / type / token / search by hash.
+
+![Whale Tracker](docs/screenshots/02-whale-tracker.png)
+
+### Exchange Flows — CEX leaderboard
+Inflow vs. outflow across Binance, Coinbase, Kraken, OKX, Bybit and more. Per-token breakdown, 30-day netflow chart, top destinations counter.
+
+![Exchange Flows](docs/screenshots/03-exchange-flows.png)
+
+### Market Explorer — top 100 tokens
+Sortable, searchable, with sparkline + detail dialog. CoinGecko + Binance fallback for redundancy.
+
+![Market Explorer](docs/screenshots/04-market.png)
+
+---
+
 ## Overview
 
 Whale Intel is an open-source **on-chain intelligence terminal** that tracks whale wallet activity, centralized-exchange fund flows, stablecoin peg health, and overall crypto market structure across **5 networks** (Ethereum, BSC, Polygon, Arbitrum, Bitcoin) — using **only free public infrastructure**, no paid API keys, no data vendors.
